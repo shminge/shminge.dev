@@ -5,7 +5,11 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import { serialize } from 'next-mdx-remote/serialize'
 import FancyBox from '../../components/FancyBox'
 
-const components = { FancyBox }
+const components = {
+    FancyBox,
+    h1: (props: any) => <h1 className="text-4xl font-bold my-4" {...props} />,
+    p: (props: any) => <p className="my-2 text-gray-700" {...props} />,
+}
 
 
 /**
