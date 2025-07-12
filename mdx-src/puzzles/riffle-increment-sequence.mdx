@@ -1,0 +1,31 @@
+---
+title: Riffle-Increment Sequence
+---
+import Spoiler from "components/spoiler"
+import Link from 'next/link'
+
+Here's a fun little problem to think about.
+
+Let's define a function $f$. It takes in a number $n$, and splits it into the odd digits (the 1st, 3rd, etc) and the even digits (the 2nd, 4th, etc), and then concatenates them. Note that the first digit of our number $n$ is also the first digit of this mixed up number. Take this new rearranged number, and add 1. That value is $f(n)$.
+
+Some Examples:
+- $f(75321) = 73153$
+- $f(1415) = 1146$
+- $f(191) = 120$
+- $f(10) = 11$
+- $f(7) = 8$
+
+Now, let's consider the sequence $a_{n} = f(a_{n-1})$, with $a_{0}$ some arbitrary choice. For a given choice of $a_{0}$, does $\{a_{n}\}$ loop or grow forever?
+
+### Hints
+
+**Hint #1:**
+
+<Spoiler>First, start by noting that the sequence is bijective. What does that tell you about its behaviour when it comes to loops?</Spoiler>
+
+**Hint #2:**
+
+<Spoiler>Let's say you have a number of length $n$. Will it ever reach a number of length $\lt n$?</Spoiler>
+
+
+*A solution can be found <Link href="/puzzles/riffle-increment-sequence-solution" className="text-blue-600 hover:underline">here</Link> (not yet whoops).*

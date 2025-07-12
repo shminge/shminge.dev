@@ -32,16 +32,17 @@ const links: LinkWidgetProps[] = [
         altText: 'Code::Stats',
         backgroundColour: '#F2B866',
         link: 'https://codestats.net/users/shminge'
+    },
+    {
+        icon: 'https://static.itch.io/images/itchio-textless-black.svg',
+        altText: 'itch.io',
+        backgroundColour: '#FF244A',
+        link: 'https://shminge.itch.io/'
     }
 ]
 
 export default function Home() {
     return (
-        <main className="p-8 space-y-8 max-w-5xl mx-auto">
-            {/* Title and Menu Bar */}
-            <Header />
-
-            {/* Content Area */}
             <section className="flex flex-row gap-8">
                 {/* Text */}
                 <div className="flex-1 max-w-full">
@@ -66,6 +67,5 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-        </main>
     )
 }

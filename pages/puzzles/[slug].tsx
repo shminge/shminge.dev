@@ -6,10 +6,12 @@ import { serialize } from 'next-mdx-remote/serialize'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import Spoiler from '../../components/spoiler'
+import Link from 'next/link'
 
 const components = {
     Spoiler,
-    h1: (props: any) => <h1 className="text-4xl font-bold my-4" {...props} />,
+    Link,
+    h1: (props: any) => <h1 className="text-center text-2xl font-bold underline decoration-gray-800 underline-offset-8 mb-6" {...props} />,
     p: (props: any) => <p className="my-2 text-gray-700" {...props} />,
 }
 
@@ -30,21 +32,23 @@ export default function PostPage({
 }) {
     console.log("Building page with " + JSON.stringify(frontMatter))
     return (
-        <main style={{ padding: '2rem' }}>
-            <h1>{frontMatter.title}</h1>
-            <p>{frontMatter.date}</p>
-            <MDXRemote {...source} components={components} />
+        <main className="prose mx-auto px-4">
+        <h1 className="text-center text-3xl font-bold underline decoration-gray-800 underline-offset-8 mb-6">
+            {frontMatter.title}
+        </h1>
+        <p className="text-center text-gray-500 mb-4">{frontMatter.date}</p>
+        <MDXRemote {...source} components={components} />
         </main>
     )
 }
 
 /**
- * We want to be able to dynamically handle /blog/*.mdx, so we read which exist in order to tell nextjs to make them.
+ * We want to be able to dynamically handle /puzzle/*.mdx, so we read which exist in order to tell nextjs to make them.
  */
 export const getStaticPaths: GetStaticPaths = async () => {
     console.log("getStaticPaths called")
     // Grab the files out of /posts/
-    const files = fs.readdirSync(path.join(process.cwd(), 'mdx-src/posts'))
+    const files = fs.readdirSync(path.join(process.cwd(), 'mdx-src/puzzles'))
 
     // for each file, we pass it as a potential slug value.
     const paths = files.map((file) => ({
@@ -62,7 +66,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.log("getStaticProps called with:", params)
     const slug = params?.slug as string
-    const filepath = path.join(process.cwd(), 'mdx-src/posts', `${slug}.mdx`)
+    const filepath = path.join(process.cwd(), 'mdx-src/puzzles', `${slug}.mdx`)
     const source = fs.readFileSync(filepath, 'utf8')
 
     const mdxSource = await serialize(source, {
