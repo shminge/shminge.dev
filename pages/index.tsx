@@ -27,6 +27,12 @@ const links: LinkWidgetProps[] = [
         link: 'https://www.fxhash.xyz/u/shminge',
         backgroundColour: '#000000',
     },
+    {
+        icon: 'https://codestats.net/assets/frontend/images/Logo-92e1d93256eae2d7dde539f1df59b06c.svg?vsn=d',
+        altText: 'Code::Stats',
+        backgroundColour: '#F2B866',
+        link: 'https://codestats.net/users/shminge'
+    }
 ]
 
 export default function Home() {
