@@ -6,7 +6,6 @@ import { serialize } from 'next-mdx-remote/serialize'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import Spoiler from '../../components/spoiler'
-import '../../styles/globals.css'
 import Link from 'next/link'
 
 const components = {
