@@ -43,29 +43,39 @@ const links: LinkWidgetProps[] = [
 
 export default function Home() {
     return (
-            <section className="flex flex-row gap-8">
-                {/* Text */}
-                <div className="flex-1 max-w-full">
-                    <p className="mb-4 break-words"> 
-                        This is heavily under construction. Check back later!
-                    </p>
-                    <ul className="space-y-2 list-disc list-inside">
-                        <li>
-                            <Link href="/blog/hello-world" className="text-blue-600 hover:underline">
-                                Hello World
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+        <section className="flex flex-row gap-8">
+            {/* Text */}
+            <div className="flex-1 max-w-full">
+                <p className="mb-4 break-words text-white"> 
+                    This is heavily under construction. Check back later!
+                </p>
+                <ul className="space-y-2 list-disc list-inside">
+                    <li>
+                        <Link 
+                            href="/blog/hello-world" 
+                            className="hover:underline hover:opacity-80"
+                            style={{ color: '#e9d758' }}
+                        >
+                            Hello World
+                        </Link>
+                    </li>
+                </ul>
+            </div>
 
-                {/* Link Widget Grid */}
-                <div className="w-max  ml-auto">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-                        {links.map((link, index) => (
-                            <LinkWidget key={index} {...link} />
-                        ))}
-                    </div>
+            {/* Vertical divider line between text and widgets */}
+            <div 
+                className="w-px flex-shrink-0 self-stretch" 
+                style={{ backgroundColor: '#e9d758' }}
+            ></div>
+
+            {/* Link Widget Grid */}
+            <div className="w-max">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+                    {links.map((link, index) => (
+                        <LinkWidget key={index} {...link} />
+                    ))}
                 </div>
-            </section>
+            </div>
+        </section>
     )
 }

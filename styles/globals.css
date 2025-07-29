@@ -1,2 +1,62 @@
 @import "tailwindcss";
 
+/* Body background */
+body {
+  background-color: #5d5d81;
+  color: white;
+}
+
+/* Header divider line - add this class to a div after your header */
+.header-divider {
+  height: 1px;
+  background-color: #e9d758;
+  width: 100%;
+}
+
+/* Styling for the main header if you want it to blend with the new theme */
+.main-header {
+  background-color: #5d5d81;
+  color: white;
+}
+
+/* You might also want to adjust link colors globally */
+a {
+  color: #e9d758;
+}
+
+a:hover {
+  color: #f5e76b;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.content h1 {
+  font-size: 2rem;
+  border-bottom: 1px solid #e9d758;
+  display: inline-block;
+}
+
+.content h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #e9d758;
+  display: inline-block;
+}
+
+.content h3 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  border-bottom: 1px solid #e9d758;
+  display: inline-block;
+}
+
+/* Paragraphs */
+.content p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #f0f0f0;
+  margin: 0.5em 0 1em;
+}

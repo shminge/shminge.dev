@@ -8,7 +8,7 @@ export default function Spoiler({ children }: { children: React.ReactNode }) {
       onClick={() => setRevealed(true)}
       className={`inline-block rounded px-1 transition-all duration-300 ${
         revealed
-          ? "text-black bg-black/20"
+          ? "text-white bg-black/20"
           : "bg-black text-black brightness-0 cursor-pointer"
       }`}
     >
