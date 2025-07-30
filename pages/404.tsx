@@ -1,3 +1,5 @@
+import Train from "../components/traindemo";
+
 export default function Custom404() {
   return (
     <main className="flex  flex-col items-center justify-center bg-white text-gray-900 p-4">

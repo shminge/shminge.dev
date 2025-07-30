@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Header from '../components/mainheader'
 import LinkWidget, { LinkWidgetProps } from '../components/linkwidget'
+import Train from '../components/traindemo'
 
 const links: LinkWidgetProps[] = [
     {
@@ -43,6 +44,7 @@ const links: LinkWidgetProps[] = [
 
 export default function Home() {
     return (
+        <div>
         <section className="flex flex-row gap-8">
             {/* Text */}
             <div className="flex-1 max-w-full">
@@ -77,5 +79,9 @@ export default function Home() {
                 </div>
             </div>
         </section>
+            <div>
+                <Train offset={0} nextPage='/puzzles/riffle-increment-sequence' />
+            </div>
+        </div>
     )
 }

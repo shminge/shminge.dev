@@ -7,12 +7,14 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import Spoiler from '../../components/spoiler'
 import Link from 'next/link'
+import Train from '../../components/traindemo'
 
 const components = {
     Spoiler,
     Link,
     h1: (props: any) => <h1 {...props} />,
     p: (props: any) => <p {...props} />,
+    Train,
 }
 
 export default function PostPage({
