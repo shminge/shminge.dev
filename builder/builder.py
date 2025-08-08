@@ -3,24 +3,45 @@ import utils
 from pathlib import Path
 import logging
 import re
+import config
 
 
 def parse_page(file: Path):
+    print(f"Parsing {file}")
 
     page_content = file.read_text()
 
     for name, data in components.items():
         params, content = data
-        pattern = r"<" + name + " (.*)/*>"
+        block_pattern = r"<" + name + " (.*)/*>"
+        multi_pattern = re.compile(r"<"+ name + "(.*?)>(.*?)</"+name+">", re.DOTALL)
 
 
-        def substituter(match):
+        def block_substituter(match):
             param_values = utils.parse_args(match.group(1))
 
             return utils.render_component(content, param_values)
+
+        def multi_substituter(match):
+            param_values = utils.parse_args(match.group(1))
+            param_values["inner"] = match.group(2)
+
+            return utils.render_component(content, param_values)
         
-        page_content = re.sub(pattern, substituter, page_content)
-    
+        for i in range(config.MAX_RECURSION):
+            new_content = re.sub(multi_pattern, multi_substituter, page_content)
+
+            if new_content == page_content:
+                break
+            page_content = new_content
+        
+
+        for i in range(config.MAX_RECURSION):
+            new_content = re.sub(block_pattern, block_substituter, page_content)
+            if new_content == page_content:
+                break
+            page_content = new_content
+
     return page_content
 
 
