@@ -1,3 +1,4 @@
+import shutil
 import utils
 from pathlib import Path
 import logging
@@ -10,7 +11,7 @@ def parse_page(file: Path):
 
     for name, data in components.items():
         params, content = data
-        pattern = r"<" + name + " (.*)>"
+        pattern = r"<" + name + " (.*)/*>"
 
 
         def substituter(match):
@@ -23,6 +24,21 @@ def parse_page(file: Path):
     return page_content
 
 
+def process_site(src_dir: Path, output_dir: Path):
+    for item in src_dir.rglob('*'):
+        relative_path = item.relative_to(src_dir)
+        destination = output_dir / relative_path
+
+        if item.is_dir():
+            destination.mkdir(parents=True, exist_ok=True)
+        elif item.is_file():
+            destination.parent.mkdir(parents=True, exist_ok=True)
+
+            if item.suffix == '.html':
+                new_content = parse_page(item)
+                destination.write_text(new_content, encoding='utf-8')
+            else:
+                shutil.copy2(item, destination)
 
 
 
@@ -34,16 +50,4 @@ components = utils.gather_components()
 src_dir = Path(utils.get_folder("source"))
 output_dir = Path(utils.get_folder("output"))
 
-for file in src_dir.iterdir():
-    if file.is_file():
-        if file.suffix == '.html':
-            new_content = parse_page(file)
-            filename = file.stem + file.suffix
-
-            file_path = output_dir / filename
-
-            file_path.write_text(new_content, encoding="utf-8")
-        else:
-            logging.warning(f"Skipping non-html component {(file.stem, file.suffix)}")
-    else:
-        logging.warning(f"Skipping non-file {file.stem}")
+process_site(src_dir=src_dir, output_dir=output_dir)
