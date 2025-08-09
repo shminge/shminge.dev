@@ -15,7 +15,7 @@
 }
 
 .content-box {
-  background-color: #4a4a6c;
+  background-color: #4a4a6b;
   padding: 1.5rem;
   border-radius: 0.5rem;
 }
@@ -111,4 +111,16 @@
 
 .site-header nav a:hover {
   text-decoration: underline;
+}
+
+/* Reset margins and paddings for the whole page */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Optional, but recommended to handle box-sizing issues */
+}
+
+html,
+body {
+  height: 100%; /* Ensure the body stretches to the full height */
 }
