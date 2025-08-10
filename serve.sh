@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd dist
+cd docs
 
 python3 -m http.server

@@ -2,6 +2,7 @@
 .layout-wrapper {
   min-height: 100vh;
   background-color: #5d5d81;
+  color: white;
 }
 
 .layout-main {
@@ -18,6 +19,7 @@
   background-color: #4a4a6b;
   padding: 1.5rem;
   border-radius: 0.5rem;
+  color: white;
 }
 
 .home-section {
