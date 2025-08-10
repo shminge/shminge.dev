@@ -10,4 +10,4 @@ SOURCE = "/src"
 # destination folder for the built site
 OUTPUT = "/dist"
 
-MAX_RECURSION = 3
+MAX_RECURSION = 10
