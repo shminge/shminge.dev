@@ -1,4 +1,4 @@
-name: Build and Deploy to GitHub Pages
+name: Copy dist/ to gh-pages
 
 on:
   push:
@@ -6,25 +6,26 @@ on:
       - main
 
 permissions:
-  contents: write  # allow pushing to gh-pages
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout main
         uses: actions/checkout@v4
-
-      - name: Build site
-        run: |
-          rm -rf dist
-          mkdir dist
-          bash build.sh
-
-      - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.BUILD_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
+          fetch-depth: 0  # required to switch branches
+
+      - name: Deploy dist folder to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git switch gh-pages || git switch --orphan gh-pages
+          rm -rf ./*
+          cp -r dist/* ./
+          git add .
+          git commit -m "Deploy from main" || echo "No changes to commit"
+          git push origin gh-pages --force
