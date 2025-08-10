@@ -8,6 +8,6 @@ COMPONENTS = "/components"
 SOURCE = "/src"
 
 # destination folder for the built site
-OUTPUT = "/dist"
+OUTPUT = "/docs"
 
 MAX_RECURSION = 10
