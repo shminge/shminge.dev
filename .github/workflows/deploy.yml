@@ -1,29 +1,30 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy to GitHub Pages
+
 on:
   push:
     branches:
       - main
+
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write  # allow pushing to gh-pages
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Build site
-        run: ./build.sh
+        run: |
+          rm -rf dist
+          mkdir dist
+          bash build.sh
 
-      - name: Deploy
+      - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.BUILD_TOKEN }}
           publish_dir: ./dist
+          publish_branch: gh-pages
