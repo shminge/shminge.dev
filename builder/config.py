@@ -4,10 +4,11 @@ ROOT = ".."
 # folder to store the components in
 COMPONENTS = "/components"
 
-# folder for the input site
+# folder for builder to build
 SOURCE = "/src"
 
 # destination folder for the built site
 OUTPUT = "/docs"
 
+# how deep to render nested components
 MAX_RECURSION = 10
