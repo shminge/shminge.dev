@@ -13,7 +13,7 @@ def parse_page(file: Path):
 
     for name, data in components.items():
         params, content = data
-        block_pattern = r"<" + name + " (.*)/*>"
+        block_pattern = re.compile(r"<" + name + "(.*?)/*>", re.DOTALL)
         multi_pattern = re.compile(r"<"+ name + "(.*?)>(.*?)</"+name+">", re.DOTALL)
 
 

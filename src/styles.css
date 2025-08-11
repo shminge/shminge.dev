@@ -132,7 +132,7 @@ body {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .divider {
     display: none;
   }
