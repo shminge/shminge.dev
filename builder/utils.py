@@ -69,3 +69,71 @@ def parse_args(arg_string: str) -> dict[str, str]:
 
     matches = re.findall(pattern, arg_string)
     return dict(matches)
+
+#### SUBSTITUTIONS ####
+
+# markdown links
+link_pattern = re.compile(
+            r"\[\[(?P<local_link>[^\]\|\n]+)(?:\|(?P<local_title>[^\]\n]*))?]]"
+            r"|\[(?P<external_title>[^\]]+)\]\((?P<external_link>[^)]+)\)"
+        )
+
+def link_substituter(match):
+            gd = match.groupdict()
+
+            if gd["local_link"]:
+                link = gd["local_link"]
+                title = gd["local_title"] or gd["local_link"]
+
+            else:  # external link
+                link = "https://"+gd["external_link"]
+                title = gd["external_title"]
+
+            return f'<a href="{link}">{title}</a>'
+
+def parse_links(content):
+    return re.sub(link_pattern, link_substituter, content)
+
+
+# inline components
+
+def parse_inline(page_content, name, component_content):
+    block_pattern = re.compile(r"<" + name + "(.*?)/>", re.DOTALL)
+
+    def block_substituter(match):
+        param_values = parse_args(match.group(1))
+        return render_component(component_content, param_values)
+
+
+    for i in range(config.MAX_RECURSION):
+        new_content = re.sub(block_pattern, block_substituter, page_content)
+        if new_content == page_content:
+            break
+        page_content = new_content
+    
+    return page_content
+
+
+# mutli_line components (with $inner content)
+
+
+def parse_multi(page_content, name, component_content):
+        
+    multi_pattern = re.compile(r"<"+ name + "(.*?)>(.*?)</"+name+">", re.DOTALL)
+
+
+    def multi_substituter(match):
+        param_values = parse_args(match.group(1))
+        param_values["inner"] = match.group(2)
+
+        return render_component(component_content, param_values)
+        
+    for i in range(config.MAX_RECURSION):
+        new_content = re.sub(multi_pattern, multi_substituter, page_content)
+
+        if new_content == page_content:
+            break
+        page_content = new_content
+
+    return page_content
+
