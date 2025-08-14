@@ -7,12 +7,14 @@
 
 .layout-main {
   padding: 2rem;
-  max-width: 80rem; /* same as Tailwind's max-w-5xl */
+  max-width: 80rem;
+  /* same as Tailwind's max-w-5xl */
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* same as space-y-8 */
+  gap: 2rem;
+  /* same as space-y-8 */
 }
 
 .content-box {
@@ -119,12 +121,14 @@ a:hover {
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Optional, but recommended to handle box-sizing issues */
+  box-sizing: border-box;
+  /* Optional, but recommended to handle box-sizing issues */
 }
 
 html,
 body {
-  height: 100%; /* Ensure the body stretches to the full height */
+  height: 100%;
+  /* Ensure the body stretches to the full height */
 }
 
 @media (max-width: 600px) {
