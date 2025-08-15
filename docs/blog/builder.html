@@ -28,12 +28,19 @@
         </header>
 
         <div class="content-box">
-          <h3>Welcome to my blog!</h3>
+          <!-- prettier-ignore -->
+          <p>I thought it would be appropriate to start this blog off by writing a bit about what powers it. It lives on Github Pages (<a href="https://github.com/shminge/shminge.dev">you can find all of this site there</a>), but if you do some snooping around in the code you'll find some very strange looking <code>html</code> files. For example, this page you're on right now is the product of the following source page:</p>
+          <pre><code class="language-html">&lt;page​layout&gt;
+    &lt;m​d&gt;
+        &lt;!-- markdown stuff --&gt;
+    &lt;/m​d&gt;
+&lt;/page​layout&gt;
+</code></pre>
           <p>
-            I've stripped it away to the bare minimum. No frameworks other than
-            a small templating system I cooked up for this site specifically. I
-            hope to keep this chill and expand it over time.
+            Anyone familiar with <code>html</code> will know that those tags
+            don't exist. So how is this site working?
           </p>
+          <h3>Enter <code>builder.py</code>.</h3>
         </div>
       </main>
     </div>

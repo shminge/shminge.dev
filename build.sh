@@ -2,7 +2,7 @@
 
 cd src
 
-#npx prettier . --write
+npx prettier . --write
 
 # Step 1: Change to /builder
 cd ../builder || { echo "Failed to change directory to /builder"; exit 1; }

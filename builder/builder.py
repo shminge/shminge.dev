@@ -11,6 +11,10 @@ def parse_page(file: Path):
 
     page_content = file.read_text()
 
+
+    if config.PARSE_MD:
+        page_content = utils.parse_markdown(page_content)
+
     if config.PARSE_MD_LINKS:
         page_content = utils.parse_links(page_content)
 
@@ -21,8 +25,6 @@ def parse_page(file: Path):
 
         page_content = utils.parse_inline(page_content, name, component_content)
 
-    if config.PARSE_MD:
-        page_content = utils.parse_markdown(page_content)
 
     return page_content
 
