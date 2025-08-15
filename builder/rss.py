@@ -6,9 +6,10 @@ from utils import get_folder
 rss_path = get_folder("output") + config.RSS_PATH
 
 def build_rss(entry_list):
+    ET.register_namespace('atom', 'http://www.w3.org/2005/Atom')
+
     rss = ET.Element('rss', {
         'version': '2.0',
-        'xmlns:atom': 'http://www.w3.org/2005/Atom'
     })
     channel = ET.SubElement(rss, 'channel')
 

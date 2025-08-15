@@ -27,11 +27,11 @@ RSS_PATH = "/feed.xml"
 # how many of the latest posts to include on the feed
 RSS_FEED_COUNT = 15
 
-SITE_ROOT = "https://www.shminge.dev/"
+SITE_ROOT = "https://shminge.dev/"
 
 RSS_CHANNEL = {
     'title': 'shminge.dev',
-    'link': 'https://www.shminge.dev/',
+    'link': 'https://shminge.dev/',
     'description':'Posts from shminge.dev, covering various topics',
     'language': 'en-us'
 }
