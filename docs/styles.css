@@ -33,13 +33,13 @@
 /* Default layout styles */
 .layout-wrapper {
   min-height: 100vh;
-  background-color: #5d5d81;
+  background: radial-gradient(circle at center, #484872 0%, #2d2d49 100%);
   color: white;
 }
 
 .layout-main {
   padding: 2rem;
-  max-width: 80rem; /* same as Tailwind's max-w-5xl */
+  max-width: 60rem; /* same as Tailwind's max-w-5xl */
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -48,7 +48,7 @@
 }
 
 .content-box {
-  background-color: #4a4a6b;
+  background-color: #2a2a44;
   padding: 1.5rem;
   border-radius: 0.5rem;
   color: white;
@@ -89,7 +89,7 @@ li {
 }
 
 a {
-  color: #e9d758;
+  color: #f2b866;
   text-decoration: none;
 }
 
@@ -100,7 +100,7 @@ a:hover {
 
 .divider {
   width: 1px;
-  background-color: #e9d758;
+  background-color: #f2b866;
   flex-shrink: 0;
   align-self: stretch;
 }
@@ -119,6 +119,7 @@ a:hover {
   padding: 0.5rem;
   border-radius: 6px;
   text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .link-widget img {
@@ -127,8 +128,17 @@ a:hover {
   object-fit: contain;
 }
 
+.hover-up {
+  /*display: inline-block;*/
+  transition: transform 0.15s ease;
+}
+
+.hover-up:hover {
+  transform: translateY(-3px);
+}
+
 .site-header {
-  background-color: #3e3e5c;
+  background-color: #232136;
   color: white;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -144,7 +154,7 @@ a:hover {
 }
 
 .site-header nav a {
-  color: #e9d758;
+  color: #f2b866;
   text-decoration: none;
   margin-left: 1rem;
 }
@@ -193,4 +203,31 @@ body {
     width: 32px;
     height: 32px;
   }
+}
+
+pre {
+  background-color: #232136;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto; /* Allow horizontal scrolling if code is long */
+  max-width: 90%; /* Don't take up the entire page width */
+  margin: 1rem auto; /* Center block with vertical spacing */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Optional subtle shadow */
+}
+
+pre code {
+  font-size: 0.95rem;
+  display: block; /* Ensure it fills the <pre> container */
+  white-space: pre; /* Keep line breaks intact */
+}
+
+.content-box p,
+.content-box h1,
+.content-box h2,
+.content-box h3,
+.content-box h4,
+.content-box h5,
+.content-box h6 {
+  margin-bottom: 1.25rem; /* Adjust to taste */
+  line-height: 1.6; /* Optional: improves readability */
 }
