@@ -12,3 +12,8 @@ OUTPUT = "/docs"
 
 # how deep to render nested components
 MAX_RECURSION = 10
+
+
+# Optional features
+PARSE_MD = True
+PARSE_MD_LINKS = True

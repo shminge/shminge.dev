@@ -1,10 +1,15 @@
 # Builder
-a small, dependency-less html templating engine in two files of python.
+a small, (almost) dependency-less html templating engine in two files of python.
 
 ## Features
 - **Minimal**: `builder` will let you write html how you want, and will just do the building for you
 - **Easy**: define some components, and use them wherever
 - **Tiny**: it's two python files (+config). Builds into plain html you can put anywhere you like, no big bloated frameworks necessary.
+
+# Optional Features
+- Adds support for custom `<md></md>` tags that convert the inner markdown content to HTML (needs `markdown-it-py`)
+- Converts markdown style links (`[[link|title]]`, `[[link]]` and `[title](external-link)`) into html
+
 
 # Usage
 Set up your config in `config.py`.

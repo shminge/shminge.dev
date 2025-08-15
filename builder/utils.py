@@ -3,7 +3,6 @@ import config
 from pathlib import Path
 import logging
 import re
-import markdown_it
 
 # returns the folder needed
 def get_folder(folder_name: str) -> str:
@@ -76,20 +75,20 @@ def parse_args(arg_string: str) -> dict[str, str]:
 
 #parse markdown
 
-md = (
-    markdown_it.MarkdownIt('commonmark')
-)
+def identity(page_content):
+    return page_content
 
-def md_repl(match):
-    content = textwrap.dedent(match.group(1))
+parse_markdown = identity
 
-    return md.render(content)
-
-
-def parse_markdown(page_content):
+if config.PARSE_MD:
+    import markdown_it
     md_pattern = re.compile(r"<md>(.*?)</md>", re.DOTALL)
+    md = markdown_it.MarkdownIt('commonmark')
+    def parse_md(page_content): # type: ignore
+        return re.sub(md_pattern, lambda m: md.render(textwrap.dedent(m.group(1))), page_content)
+    parse_markdown = parse_md
 
-    return re.sub(md_pattern, md_repl, page_content,)
+
 
 
 
