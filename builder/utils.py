@@ -87,15 +87,46 @@ def identity(page_content):
 parse_markdown = identity
 
 if config.PARSE_MD:
-    import markdown_it
+    import markdown_it, re, textwrap
 
     md_pattern = re.compile(r"<md>(.*?)</md>", re.DOTALL)
     md = markdown_it.MarkdownIt("commonmark")
 
     def parse_md(page_content):
-        return re.sub(
-            md_pattern, lambda m: md.render(textwrap.dedent(m.group(1))), page_content
-        )
+        # Step 1: Extract and protect content within <raw> tags
+        raw_pattern = re.compile(r"<raw>(.*?)</raw>", re.DOTALL)
+        raw_content = []
+        
+        def store_raw(match):
+            index = len(raw_content)
+            raw_content.append(match.group(1))  # Store just the content, not the tags
+            return f"__RAW_PLACEHOLDER_{index}__"
+        
+        # Replace all <raw> content with placeholders
+        content_with_raw_protected = re.sub(raw_pattern, store_raw, page_content)
+        
+        # Step 2: Find and process <md> blocks in the protected content
+        def process_md_block(match):
+            md_content = match.group(1)
+            
+            # Step 3: Restore raw content within this md block before rendering
+            md_with_raw_restored = md_content
+            for i, content in enumerate(raw_content):
+                placeholder = f"__RAW_PLACEHOLDER_{i}__"
+                md_with_raw_restored = md_with_raw_restored.replace(placeholder, content)
+            
+            # Step 4: Render the markdown
+            return md.render(textwrap.dedent(md_with_raw_restored))
+        
+        # Process all md blocks
+        result = re.sub(md_pattern, process_md_block, content_with_raw_protected)
+        
+        # Step 5: Restore any remaining raw content that was outside md blocks
+        for i, content in enumerate(raw_content):
+            placeholder = f"__RAW_PLACEHOLDER_{i}__"
+            result = result.replace(placeholder, content)
+        
+        return result
 
     parse_markdown = parse_md
 
