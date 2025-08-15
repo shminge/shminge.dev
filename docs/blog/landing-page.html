@@ -14,6 +14,9 @@
 
     <script>
       hljs.highlightAll();
+      const pages = JSON.parse(
+        '[{"title": "Hello World!", "pubDate": "Sun, 10 Aug 2025 00:00:00 +0000", "description": "first post on shminge.dev", "link": "https://shminge.dev/blog/hello-world.html", "guid": "https://shminge.dev/blog/hello-world.html"}, {"title": "the best way to get started is to do it yourself", "pubDate": "Fri, 15 Aug 2025 00:00:00 +0000", "description": "some musings on blogging software and the benefits of DIY", "link": "https://shminge.dev/blog/builder.html", "guid": "https://shminge.dev/blog/builder.html"}]',
+      );
     </script>
   </head>
   <body>
@@ -28,10 +31,26 @@
         </header>
 
         <div class="content-box">
-          <h3>Posts:</h3>
-          <ul class="link-list">
-            <li><a href="/blog/hello-world.html">Hello World</a></li>
-          </ul>
+          <h3 class="no-gap">Posts:</h3>
+          <ul class="link-list" id="allposts"></ul>
+          <script>
+            const ulElem = document.getElementById("allposts");
+            let entries = [];
+            for (let page of pages) {
+              let entry = {
+                content: `<a href="${page.link}">${page.title}</a>`,
+                date: page.pubDate,
+              };
+              entries.push(entry);
+            }
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            for (let entry of entries) {
+              const liNew = document.createElement("li");
+              liNew.innerHTML = entry.content;
+              ulElem.appendChild(liNew);
+            }
+          </script>
         </div>
       </main>
     </div>

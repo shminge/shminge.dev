@@ -241,6 +241,10 @@ pre code {
   color: #f2b866;
 }
 
+.no-gap {
+  margin-bottom: 0 !important;
+}
+
 strong {
   color: #f2b866;
 }

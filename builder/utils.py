@@ -61,7 +61,7 @@ def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
 
     def replacer(match) -> str:
         key = match.group(1)
-        return substitutions.get(key, "!!Invalid!!")
+        return substitutions.get(key) or config.GLOBAL_PARAMS.get(key) or "!!INVALID!!"
 
     return re.sub(pattern, replacer, raw_data)
 

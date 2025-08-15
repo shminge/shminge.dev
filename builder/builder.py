@@ -1,12 +1,8 @@
+import json
 import shutil
 import utils
 from pathlib import Path
 import config
-
-global_params = {
-    "pages": []
-}
-
 
 
 
@@ -52,12 +48,14 @@ def process_site(src_dir: Path, output_dir: Path):
                 pg_info = utils.get_page_info(item)
 
                 if pg_info:
-                    global_params["pages"].append(pg_info)
+                    config.GLOBAL_PARAMS["pages"].append(pg_info)
 
 
             else:
                 shutil.copy2(item, destination)
     
+    config.GLOBAL_PARAMS["pages_json"] = json.dumps(config.GLOBAL_PARAMS["pages"])
+
     for entry in pages_queue:
         page, destination = entry
         new_content = parse_page(page)
@@ -76,4 +74,4 @@ process_site(src_dir=src_dir, output_dir=output_dir)
 
 if config.GENERATE_RSS:
     import rss
-    rss.build_rss(global_params["pages"])
+    rss.build_rss(config.GLOBAL_PARAMS["pages"])

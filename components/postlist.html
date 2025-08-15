@@ -1,0 +1,24 @@
+<!--
+@param max_posts
+@param starts_with
+@param id
+-->
+
+<ul class="link-list" id="$id">
+</ul>
+<script>
+    const ulElem = document.getElementById("$id");
+    let entries = [];
+    for (let page of pages) {
+        let entry = {'content':`<a href="${page.link}">${page.title}</a>`,'date':page.pubDate} 
+        entries.push(entry)
+    }
+    entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    for (let entry of entries) {
+        const liNew = document.createElement('li');
+        liNew.innerHTML = entry.content;
+        ulElem.appendChild(liNew);
+    }
+
+</script>
