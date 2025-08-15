@@ -4,6 +4,7 @@ from pathlib import Path
 import logging
 import re
 
+
 # returns the folder needed
 def get_folder(folder_name: str) -> str:
     match folder_name:
@@ -24,13 +25,15 @@ def gather_components() -> dict[str, tuple[list[str], str]]:
     components_dir = Path(get_folder("components"))
     for file in components_dir.iterdir():
         if file.is_file():
-            if file.suffix == '.html':
+            if file.suffix == ".html":
                 components[file.stem] = read_component(file)
             else:
-                logging.warning(f"Skipping non-html component {(file.stem, file.suffix)}")
+                logging.warning(
+                    f"Skipping non-html component {(file.stem, file.suffix)}"
+                )
         else:
             logging.warning(f"Skipping non-file {file.stem}")
-    
+
     return components
 
 
@@ -42,7 +45,7 @@ def read_component(file: Path) -> tuple[list[str], str]:
     params = re.findall(param_pattern, content)
 
     if params:
-        parts = content.split('-->', 1)
+        parts = content.split("-->", 1)
 
         if len(parts) <= 1:
             raise Exception(f"Component {file.stem} malformed")
@@ -50,6 +53,7 @@ def read_component(file: Path) -> tuple[list[str], str]:
         content = parts[1].lstrip()
 
     return (params, content)
+
 
 # parses the component with the given values
 def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
@@ -62,61 +66,67 @@ def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
     return re.sub(pattern, replacer, raw_data)
 
 
-
 # parses `key="value"` pairs
 def parse_args(arg_string: str) -> dict[str, str]:
-    
+
     pattern = r'(\w+)="([^"]*)"'
 
     matches = re.findall(pattern, arg_string)
     return dict(matches)
 
+
 #### SUBSTITUTIONS ####
 
-#parse markdown
+# parse markdown (if config has it turned on)
+
 
 def identity(page_content):
     return page_content
+
 
 parse_markdown = identity
 
 if config.PARSE_MD:
     import markdown_it
+
     md_pattern = re.compile(r"<md>(.*?)</md>", re.DOTALL)
-    md = markdown_it.MarkdownIt('commonmark')
-    def parse_md(page_content): # type: ignore
-        return re.sub(md_pattern, lambda m: md.render(textwrap.dedent(m.group(1))), page_content)
+    md = markdown_it.MarkdownIt("commonmark")
+
+    def parse_md(page_content):
+        return re.sub(
+            md_pattern, lambda m: md.render(textwrap.dedent(m.group(1))), page_content
+        )
+
     parse_markdown = parse_md
-
-
-
-
 
 
 # markdown links
 link_pattern = re.compile(
-            r"\[\[(?P<local_link>[^\]\|\n]+)(?:\|(?P<local_title>[^\]\n]*))?]]"
-            r"|\[(?P<external_title>[^\]]+)\]\((?P<external_link>[^)]+)\)"
-        )
+    r"\[\[(?P<local_link>[^\]\|\n]+)(?:\|(?P<local_title>[^\]\n]*))?]]"
+    r"|\[(?P<external_title>[^\]]+)\]\((?P<external_link>[^)]+)\)"
+)
+
 
 def link_substituter(match):
-            gd = match.groupdict()
+    gd = match.groupdict()
 
-            if gd["local_link"]:
-                link = gd["local_link"]
-                title = gd["local_title"] or gd["local_link"]
+    if gd["local_link"]:
+        link = gd["local_link"]
+        title = gd["local_title"] or gd["local_link"]
 
-            else:  # external link
-                link = "https://"+gd["external_link"]
-                title = gd["external_title"]
+    else:  # external link
+        link = "https://" + gd["external_link"]
+        title = gd["external_title"]
 
-            return f'<a href="{link}">{title}</a>'
+    return f'<a href="{link}">{title}</a>'
+
 
 def parse_links(content):
     return re.sub(link_pattern, link_substituter, content)
 
 
 # inline components
+
 
 def parse_inline(page_content, name, component_content):
     block_pattern = re.compile(r"<" + name + "(.*?)/>", re.DOTALL)
@@ -125,13 +135,12 @@ def parse_inline(page_content, name, component_content):
         param_values = parse_args(match.group(1))
         return render_component(component_content, param_values)
 
-
     for i in range(config.MAX_RECURSION):
         new_content = re.sub(block_pattern, block_substituter, page_content)
         if new_content == page_content:
             break
         page_content = new_content
-    
+
     return page_content
 
 
@@ -139,16 +148,15 @@ def parse_inline(page_content, name, component_content):
 
 
 def parse_multi(page_content, name, component_content):
-        
-    multi_pattern = re.compile(r"<"+ name + "(.*?)>(.*?)</"+name+">", re.DOTALL)
 
+    multi_pattern = re.compile(r"<" + name + "(.*?)>(.*?)</" + name + ">", re.DOTALL)
 
     def multi_substituter(match):
         param_values = parse_args(match.group(1))
         param_values["inner"] = match.group(2)
 
         return render_component(component_content, param_values)
-        
+
     for i in range(config.MAX_RECURSION):
         new_content = re.sub(multi_pattern, multi_substituter, page_content)
 
@@ -157,4 +165,3 @@ def parse_multi(page_content, name, component_content):
         page_content = new_content
 
     return page_content
-

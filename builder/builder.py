@@ -20,16 +20,15 @@ def parse_page(file: Path):
         page_content = utils.parse_multi(page_content, name, component_content)
 
         page_content = utils.parse_inline(page_content, name, component_content)
-    
+
     if config.PARSE_MD:
         page_content = utils.parse_markdown(page_content)
-
 
     return page_content
 
 
 def process_site(src_dir: Path, output_dir: Path):
-    for item in src_dir.rglob('*'):
+    for item in src_dir.rglob("*"):
         relative_path = item.relative_to(src_dir)
         destination = output_dir / relative_path
 
@@ -38,12 +37,11 @@ def process_site(src_dir: Path, output_dir: Path):
         elif item.is_file():
             destination.parent.mkdir(parents=True, exist_ok=True)
 
-            if item.suffix == '.html':
+            if item.suffix == ".html":
                 new_content = parse_page(item)
-                destination.write_text(new_content, encoding='utf-8')
+                destination.write_text(new_content, encoding="utf-8")
             else:
                 shutil.copy2(item, destination)
-
 
 
 # MAIN LOOP
