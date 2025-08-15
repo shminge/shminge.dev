@@ -1,41 +1,41 @@
 <pagelayout>
     <md><raw>
-I thought it would be appropriate to start this blog off by writing a bit about what powers it. It lives on Github Pages ([you can find all of this site there](https://github.com/shminge/shminge.dev)), but if you do some snooping around in the code you'll find some very strange looking `html` files. For example, this page you're on right now is the product of the [following source page](https://github.com/shminge/shminge.dev/blob/main/src/blog/builder.html):
+        I thought it would be appropriate to start this blog off by writing a bit about what powers it. It lives on Github Pages ([you can find all of this site there](https://github.com/shminge/shminge.dev)), but if you do some snooping around in the code you'll find some very strange looking `html` files. For example, this page you're on right now is the product of the [following source page](https://github.com/shminge/shminge.dev/blob/main/src/blog/builder.html):
 
-```html
-<pagelayout>
-    <md>
-        <!-- markdown stuff -->
-    </md>
-</pagelayout>
-```
+        ```html
+        <pagelayout>
+            <md>
+                <!-- markdown stuff -->
+            </md>
+        </pagelayout>
+        ```
 
-Anyone familiar with `html` will know that those tags don't exist. So how is this site working?
+        Anyone familiar with `html` will know that those tags don't exist. So how is this site working?
 
-### Existing Solutions
-I've always wanted to host a site over the years, so I've tried many of the options there are out there, and found them all lacking in one way or another. Some of my favourites were:
-- **[Bear Blog](https://bearblog.dev/) -** I love this one so much, but its simplicity is also its drawback, as I can't do everything I want to do
-- **[Quartz](https://quartz.jzhao.xyz/) -** This one was very attractive, as I store as much stuff as I can in a large [Obsidian](https://obsidian.md/) vault (this post is being written in it right now), but as nice as it would be to be able to publish straight out of it, it'd take a really good understanding of the codebase before I could customise it to the degree I wanted.
-- **[React + Next.js](https://nextjs.org/) -** This one almost stuck (this current site is a port of that attempt to plain `html`), I just didn't like how bloated it felt for what I wanted out of it.
+        ### Existing Solutions
+        I've always wanted to host a site over the years, so I've tried many of the options there are out there, and found them all lacking in one way or another. Some of my favourites were:
+        - **[Bear Blog](https://bearblog.dev/) -** I love this one so much, but its simplicity is also its drawback, as I can't do everything I want to do.
+        - **[Quartz](https://quartz.jzhao.xyz/) -** This one was very attractive, as I store as much stuff as I can in a large [Obsidian](https://obsidian.md/) vault (this post is being written in it right now), but as nice as it would be to be able to publish straight out of it, it'd take a really good understanding of the codebase before I could customise it to the degree I wanted.
+        - **[React + Next.js](https://nextjs.org/) -** This one almost stuck (this current site is a port of that attempt to plain `html`), I just didn't like how bloated it felt for what I wanted out of it.
 
-Being able to play with different platforms felt good and fun, but ultimately it wasn't moving me any closer to *actually having a blog with content*. It allowed me to feel productive without doing anything. So a week ago I set out to go and make my own site engine.
-### Requirements
-I had a decently good idea of what I wanted from any possible solution:
-- **Web Components** - I liked using components in React. I didn't use them for any sort of reactivity (hence the feeling of bloat), but it was really nice to be able to define something I could reuse again and again, especially if I could pass it props. I know that "official" Web Components exist, but I decided I didn't like them enough to use them.
-- **MathJax** - I like maths. It's only a matter of time until I start writing posts which need formulas.
-- **Markdown Posts** - This was more optional than the others, but I love markdown as a format.
-- **Simplicity** - This is crucial. Not only do I want full control, I want full understanding as well. The less I understand something, the harder it is to use, and the less I want to use it.
+        Being able to play with different platforms felt good and fun, but ultimately it wasn't moving me any closer to *actually having a blog with content*. It allowed me to feel productive without doing anything. So a week ago I set out to go and make my own site engine.
+        ### Requirements
+        I had a decently good idea of what I wanted from any possible solution:
+        - **Web Components** - I liked using components in React. I didn't use them for any sort of reactivity (hence the feeling of bloat), but it was really nice to be able to define something I could reuse again and again, especially if I could pass it props. I know that "official" Web Components exist, but I decided I didn't like them enough to use them.
+        - **MathJax** - I like maths. It's only a matter of time until I start writing posts which need formulas.
+        - **Markdown Posts** - This was more optional than the others, but I love markdown as a format.
+        - **Simplicity** - This is crucial. Not only do I want full control, I want full understanding as well. The less I understand something, the harder it is to use, and the less I want to use it.
 
-I ended up deciding to write in plain `HTML`, `CSS`, and `js`. However, anyone who's written `html` by hand before knows it can be a pain, so I wrote my own build script (which supports all of those criteria above): [builder: a small python build script to populate html templates](https://github.com/shminge/builder).
+        I ended up deciding to write in plain `HTML`, `CSS`, and `js`. However, anyone who's written `html` by hand before knows it can be a pain, so I wrote my own build script (which supports all of those criteria above): [builder: a small python build script to populate html templates](https://github.com/shminge/builder).
 
-### What does it do?
-As of now (development is ongoing, and it'll presumably remain that way as long as I keep working on that site), it lets you do the following:
-- **Define, use and render templates -** For example, the `<pagelayout>` block above is simply a wrapper for the rest of my site (header and such), and puts whatever is inside it in the `<body>` tags.
-- **Render Markdown -** With a bit of help from the `markdown-it-py` library, all text between `<md>` tags gets converted from Markdown to HTML at build time, letting me write in markdown and paste into my `html` after.
-- **Generate an RSS Feed -** Not yet but soon, hopefully!
+        ### What does it do?
+        As of now (development is ongoing, and it'll presumably remain that way as long as I keep working on that site), it lets you do the following:
+        - **Define, use and render templates -** For example, the `<pagelayout>` block above is simply a wrapper for the rest of my site (header and such), and puts whatever is inside it in the `<body>` tags.
+        - **Render Markdown -** With a bit of help from the `markdown-it-py` library, all text between `<md>` tags gets converted from Markdown to HTML at build time, letting me write in markdown and paste into my `html` after.
+        - **Generate an RSS Feed -** Not yet but soon, hopefully!
 
-Finally, I have a system I where I can balance writing posts with writing code for the site, and both are equally enjoyable. A system that I completely understand, and don't have to spend hours reading docs to do anything mildly complicated. A system that won't lock me in, or break unexpectedly, or randomly be deprecated. A system that is built for me, by me.
+        Finally, I have a system I where I can balance writing posts with writing code for the site, and both are equally enjoyable. A system that I completely understand, and don't have to spend hours reading docs to do anything mildly complicated. A system that won't lock me in, or break unexpectedly, or randomly be deprecated. A system that is built for me, by me.
 
-It'll always take more effort to make something yourself, but it'll always be more rewarding when you can see the end product, and know that you wrote *every line* of it.
+        It'll always take more effort to make something yourself, but it'll always be more rewarding when you can see the end product, and know that you wrote *every line* of it.
     </raw></md>
 </pagelayout>
