@@ -10,8 +10,17 @@ a small, (almost) dependency-less html templating engine in two files of python.
 
 # Optional Features
 
-- Adds support for custom `<md></md>` tags that convert the inner markdown content to HTML (needs `markdown-it-py`)
-- Converts markdown style links (`[[link|title]]`, `[[link]]` and `[title](external-link)`) into html
+### Adds support for custom `<md></md>` tags that convert the inner markdown content to HTML (needs `markdown-it-py`)
+### Converts markdown style links (`[[link|title]]`, `[[link]]` and `[title](external-link)`) into html
+### Generates an RSS feed
+Any .html files on the site containing all the below data will be built into an RSS feed.
+```html
+<!--
+@title post title
+@pubdate yyyy-mm-dd
+@desc short description of your post
+-->
+```
 
 # Usage
 
