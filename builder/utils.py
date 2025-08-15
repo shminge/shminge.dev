@@ -196,3 +196,45 @@ def parse_multi(page_content, name, component_content):
         page_content = new_content
 
     return page_content
+
+
+
+
+if config.GENERATE_RSS:
+    from datetime import datetime
+    
+    def get_page_info(page: Path):
+        page_content = page.read_text()
+
+        title_match = re.search(r"@title (.*?)$", page_content, re.MULTILINE)
+        
+        if title_match:
+            date_match = re.search(r"@pubdate (.*?)$", page_content, re.MULTILINE)
+            desc_match = re.search(r"@desc (.*?)$", page_content, re.MULTILINE)
+
+            if date_match and desc_match:
+                title = title_match.group(1)
+
+                dt = date_match.group(1)
+                date = datetime.strptime(dt, "%Y-%m-%d").strftime("%a, %d %b %Y %H:%M:%S +0000")
+
+                desc = desc_match.group(1)
+
+                # Convert page Path to URL
+                root_path = Path(config.ROOT).resolve()
+                source_path = (root_path / config.SOURCE.strip("/")).resolve()
+                link_relative = page.resolve().relative_to(source_path)
+                url = config.SITE_ROOT.rstrip("/") + "/" + str(link_relative).replace("\\", "/")
+
+                link = url
+                guid = url
+
+                print(f"{page} added to RSS as {url}")
+            
+                return {
+                    "title": title,
+                    "pubDate": date,
+                    "description": desc,
+                    "link": link,
+                    "guid": guid
+                }

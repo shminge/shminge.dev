@@ -1,9 +1,13 @@
 import shutil
 import utils
 from pathlib import Path
-import logging
-import re
 import config
+
+global_params = {
+    "pages": []
+}
+
+
 
 
 def parse_page(file: Path):
@@ -30,6 +34,9 @@ def parse_page(file: Path):
 
 
 def process_site(src_dir: Path, output_dir: Path):
+
+    pages_queue = []
+
     for item in src_dir.rglob("*"):
         relative_path = item.relative_to(src_dir)
         destination = output_dir / relative_path
@@ -40,10 +47,21 @@ def process_site(src_dir: Path, output_dir: Path):
             destination.parent.mkdir(parents=True, exist_ok=True)
 
             if item.suffix == ".html":
-                new_content = parse_page(item)
-                destination.write_text(new_content, encoding="utf-8")
+                pages_queue.append((item, destination))
+
+                pg_info = utils.get_page_info(item)
+
+                if pg_info:
+                    global_params["pages"].append(pg_info)
+
+
             else:
                 shutil.copy2(item, destination)
+    
+    for entry in pages_queue:
+        page, destination = entry
+        new_content = parse_page(page)
+        destination.write_text(new_content, encoding="utf-8")
 
 
 # MAIN LOOP
@@ -55,3 +73,7 @@ src_dir = Path(utils.get_folder("source"))
 output_dir = Path(utils.get_folder("output"))
 
 process_site(src_dir=src_dir, output_dir=output_dir)
+
+if config.GENERATE_RSS:
+    import rss
+    rss.build_rss(global_params["pages"])
