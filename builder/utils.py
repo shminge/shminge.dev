@@ -1,7 +1,9 @@
+import textwrap
 import config
 from pathlib import Path
 import logging
 import re
+import markdown_it
 
 # returns the folder needed
 def get_folder(folder_name: str) -> str:
@@ -71,6 +73,26 @@ def parse_args(arg_string: str) -> dict[str, str]:
     return dict(matches)
 
 #### SUBSTITUTIONS ####
+
+#parse markdown
+
+md = (
+    markdown_it.MarkdownIt('commonmark')
+)
+
+def md_repl(match):
+    content = textwrap.dedent(match.group(1))
+
+    return md.render(content)
+
+
+def parse_markdown(page_content):
+    md_pattern = re.compile(r"<md>(.*?)</md>", re.DOTALL)
+
+    return re.sub(md_pattern, md_repl, page_content,)
+
+
+
 
 # markdown links
 link_pattern = re.compile(

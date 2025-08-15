@@ -20,6 +20,8 @@ def parse_page(file: Path):
         page_content = utils.parse_multi(page_content, name, component_content)
 
         page_content = utils.parse_inline(page_content, name, component_content)
+    
+    page_content = utils.parse_markdown(page_content)
 
 
     return page_content
