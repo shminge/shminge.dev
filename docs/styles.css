@@ -172,6 +172,11 @@ body {
 }
 
 @media (max-width: 600px) {
+  .layout-main {
+    padding: 0;
+    gap: 0;
+  }
+
   .home-section {
     flex-direction: column;
     gap: 1rem;
