@@ -3,12 +3,13 @@ import shutil
 import utils
 from pathlib import Path
 import config
+import logging
 
 
 
 
 def parse_page(file: Path):
-    print(f"Parsing {file}")
+    logging.info(f"Parsing {file}")
 
     page_content = file.read_text()
 
@@ -62,6 +63,8 @@ def process_site(src_dir: Path, output_dir: Path):
 
 
 # MAIN LOOP
+
+logging.basicConfig(level=logging.INFO)
 
 components = utils.gather_components()
 

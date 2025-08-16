@@ -58,9 +58,24 @@ def read_component(file: Path) -> tuple[list[str], str]:
 
 
 # parses the component with the given values
-def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
+def render_component(raw_data: str, substitutions: dict[str, str], flags: list[str]) -> str:
+    # </if> flags first
 
-    # first we need to perform the json evals
+    if_pattern = re.compile(r'<if (\w+)>(.*?)<\/if>', re.DOTALL)
+
+    def if_repl(match):
+        flag = match.group(1)
+        content = match.group(2)
+
+        if flag in flags:
+            return content
+        else:
+            return ''
+        
+    raw_data = re.sub(if_pattern, if_repl, raw_data)
+
+
+    # we need to perform the json evals
 
     json_pattern = r"""\$json\(['"](.*?)['"]\)"""
 
@@ -74,7 +89,7 @@ def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
 
     def replacer(match) -> str:
         key = match.group(1)
-        return substitutions.get(key) or config.GLOBAL_PARAMS.get(key) or "!!INVALID!!"
+        return substitutions.get(key) or "!!INVALID!!"
 
     return re.sub(pattern, replacer, raw_data)
 
@@ -86,6 +101,12 @@ def parse_args(arg_string: str) -> dict[str, str]:
 
     matches = re.findall(pattern, arg_string)
     return dict(matches)
+
+def parse_flags(arg_string: str) -> list[str]:
+    pattern = r'(?:^|\s)(\w+)(?=\s|$)'
+
+    matches = re.findall(pattern, arg_string)
+    return matches
 
 
 #### SUBSTITUTIONS ####
@@ -177,7 +198,8 @@ def parse_inline(page_content, name, component_content):
 
     def block_substituter(match):
         param_values = parse_args(match.group(1))
-        return render_component(component_content, param_values)
+        flag_values = parse_flags(match.group(1))
+        return render_component(component_content, param_values, flag_values)
 
     for i in range(config.MAX_RECURSION):
         new_content = re.sub(block_pattern, block_substituter, page_content)
@@ -188,7 +210,7 @@ def parse_inline(page_content, name, component_content):
     return page_content
 
 
-# mutli_line components (with $inner content)
+# mutli-line components (with $inner content)
 
 
 def parse_multi(page_content, name, component_content):
@@ -197,9 +219,10 @@ def parse_multi(page_content, name, component_content):
 
     def multi_substituter(match):
         param_values = parse_args(match.group(1))
+        flag_values = parse_flags(match.group(1))
         param_values["inner"] = match.group(2)
 
-        return render_component(component_content, param_values)
+        return render_component(component_content, param_values, flag_values)
 
     for i in range(config.MAX_RECURSION):
         new_content = re.sub(multi_pattern, multi_substituter, page_content)
@@ -242,14 +265,15 @@ if config.GENERATE_RSS:
                 link = url
                 guid = url
 
-                print(f"{page} added to RSS as {url}")
+                logging.info(f"{page} prepared for RSS as {url}")
             
                 return {
                     "title": title,
                     "pubDate": date,
                     "description": desc,
                     "link": link,
-                    "guid": guid
+                    "guid": guid,
+                    "relativeLink": str(link_relative).replace("\\", "/")
                 }
 
 

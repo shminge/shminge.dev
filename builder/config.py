@@ -1,9 +1,3 @@
-GLOBAL_PARAMS = {
-    "pages": [],
-    "pages_json": ""
-}
-
-
 # The root folder
 ROOT = ".."
 
@@ -41,3 +35,9 @@ RSS_CHANNEL = {
     'description':'Posts from shminge.dev, covering various topics',
     'language': 'en-us'
 }
+
+
+GLOBAL_PARAMS = {
+    "pages": [],
+}
+

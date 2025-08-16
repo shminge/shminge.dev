@@ -6,16 +6,23 @@
     <title>shminge.dev</title>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/rose-pine-moon.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-
-    <script>
-      hljs.highlightAll();
+    <if highlight>
+      <!-- load code highlighting -->
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/rose-pine-moon.min.css"
+      />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+      <script>
+        hljs.highlightAll();
+      </script>
+      </if>
+      <if pages>
+      <!-- load page list-->
+      <script>
       const pages = JSON.parse($json('GLOBAL_PARAMS["pages"]'));
-    </script>
+      </script>
+      </if>
   </head>
   <body>
     <div class="layout-wrapper">

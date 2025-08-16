@@ -10,7 +10,7 @@
     const ulElem = document.getElementById("$id");
     let entries = [];
     for (let page of pages) {
-        let entry = {'content':`<a href="${page.link}">${page.title}</a>`,'date':page.pubDate} 
+        let entry = {'content':`<a href="${page.relativeLink}">${page.title}</a>`,'date':page.pubDate} 
         entries.push(entry)
     }
     entries.sort((a, b) => new Date(b.date) - new Date(a.date));
