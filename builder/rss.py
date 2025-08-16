@@ -6,6 +6,17 @@ from utils import get_folder
 rss_path = get_folder("output") + config.RSS_PATH
 
 def build_rss(entry_list):
+
+    if not entry_list:
+        return
+
+    entry_list = sorted(
+        entry_list,
+        key=lambda p: datetime.strptime(p["pubDate"], "%a, %d %b %Y %H:%M:%S %z"),
+        reverse=True  # Newest first
+    )
+
+
     ET.register_namespace('atom', 'http://www.w3.org/2005/Atom')
 
     rss = ET.Element('rss', {
@@ -13,9 +24,7 @@ def build_rss(entry_list):
     })
     channel = ET.SubElement(rss, 'channel')
 
-    ET.SubElement(channel, 'lastBuildDate').text = datetime.now(timezone.utc).strftime(
-        '%a, %d %b %Y %H:%M:%S +0000'
-    )
+    ET.SubElement(channel, 'lastBuildDate').text = entry_list[0]["pubDate"]
 
     # Channel metadata
     for key, value in config.RSS_CHANNEL.items():

@@ -6,6 +6,7 @@ import config
 
 
 
+
 def parse_page(file: Path):
     print(f"Parsing {file}")
 
@@ -53,8 +54,6 @@ def process_site(src_dir: Path, output_dir: Path):
 
             else:
                 shutil.copy2(item, destination)
-    
-    config.GLOBAL_PARAMS["pages_json"] = json.dumps(config.GLOBAL_PARAMS["pages"])
 
     for entry in pages_queue:
         page, destination = entry

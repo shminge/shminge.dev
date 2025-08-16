@@ -1,5 +1,7 @@
+import json
 import textwrap
 import config
+from config import GLOBAL_PARAMS
 from pathlib import Path
 import logging
 import re
@@ -57,6 +59,17 @@ def read_component(file: Path) -> tuple[list[str], str]:
 
 # parses the component with the given values
 def render_component(raw_data: str, substitutions: dict[str, str]) -> str:
+
+    # first we need to perform the json evals
+
+    json_pattern = r"""\$json\(['"](.*?)['"]\)"""
+
+    def json_replace(match):
+        return eval_to_json(match.group(1))
+
+    raw_data = re.sub(json_pattern, json_replace, raw_data)
+
+
     pattern = r"\$(\w+)"
 
     def replacer(match) -> str:
@@ -93,35 +106,35 @@ if config.PARSE_MD:
     md = markdown_it.MarkdownIt("commonmark")
 
     def parse_md(page_content):
-        # Step 1: Extract and protect content within <raw> tags
+        # extract and protect content within <raw> tags
         raw_pattern = re.compile(r"<raw>(.*?)</raw>", re.DOTALL)
         raw_content = []
         
         def store_raw(match):
             index = len(raw_content)
-            raw_content.append(match.group(1))  # Store just the content, not the tags
+            raw_content.append(match.group(1))
             return f"__RAW_PLACEHOLDER_{index}__"
         
-        # Replace all <raw> content with placeholders
+        # replace all <raw> content with placeholders
         content_with_raw_protected = re.sub(raw_pattern, store_raw, page_content)
         
-        # Step 2: Find and process <md> blocks in the protected content
+        # find and process <md> blocks outside the raw tags content
         def process_md_block(match):
             md_content = match.group(1)
             
-            # Step 3: Restore raw content within this md block before rendering
+            # restore raw content within this md block before rendering
             md_with_raw_restored = md_content
             for i, content in enumerate(raw_content):
                 placeholder = f"__RAW_PLACEHOLDER_{i}__"
                 md_with_raw_restored = md_with_raw_restored.replace(placeholder, content)
             
-            # Step 4: Render the markdown
+            # render the markdown
             return md.render(textwrap.dedent(md_with_raw_restored))
         
-        # Process all md blocks
+        # process all md blocks
         result = re.sub(md_pattern, process_md_block, content_with_raw_protected)
         
-        # Step 5: Restore any remaining raw content that was outside md blocks
+        # restore any remaining raw content that was outside md blocks
         for i, content in enumerate(raw_content):
             placeholder = f"__RAW_PLACEHOLDER_{i}__"
             result = result.replace(placeholder, content)
@@ -238,3 +251,7 @@ if config.GENERATE_RSS:
                     "link": link,
                     "guid": guid
                 }
+
+
+def eval_to_json(eval_str):
+    return "'"+json.dumps(eval(eval_str))+"'"
