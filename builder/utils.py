@@ -87,9 +87,14 @@ def render_component(raw_data: str, substitutions: dict[str, str], flags: list[s
 
     pattern = r"\$(\w+)"
 
+
     def replacer(match) -> str:
         key = match.group(1)
-        return substitutions.get(key) or "!!INVALID!!"
+        val = substitutions.get(key, None)
+        if val is not None :
+            return val
+        logging.warning(f"Failed to replace component ${key}")
+        return "!!INVALID!!"
 
     return re.sub(pattern, replacer, raw_data)
 

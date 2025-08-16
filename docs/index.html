@@ -37,11 +37,17 @@
                 const ulElem = document.getElementById("mainpostlist");
                 let entries = [];
                 for (let page of pages) {
-                  let entry = {
-                    content: `<a href="${page.relativeLink}">${page.title}</a>`,
-                    date: page.pubDate,
-                  };
-                  entries.push(entry);
+                  if (page.link.includes("")) {
+                    let entry = {
+                      content: `<a href="${page.link}">${page.title}</a>`,
+                      date: page.pubDate,
+                    };
+
+                    entries.push(entry);
+                    if (5 && entries.length >= 5) {
+                      break;
+                    }
+                  }
                 }
                 entries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
