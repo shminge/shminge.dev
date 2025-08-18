@@ -15,6 +15,9 @@ MAX_RECURSION = 10
 
 
 # Optional features
+
+GENERATE_SITEMAP = True;
+
 PARSE_MD = True
 PARSE_MD_LINKS = True
 
@@ -39,5 +42,6 @@ RSS_CHANNEL = {
 
 GLOBAL_PARAMS = {
     "pages": [],
+    "sitemap": [],
 }
 

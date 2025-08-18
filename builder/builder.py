@@ -45,6 +45,10 @@ def process_site(src_dir: Path, output_dir: Path):
             destination.parent.mkdir(parents=True, exist_ok=True)
 
             if item.suffix == ".html":
+
+                if config.GENERATE_SITEMAP:
+                    config.GLOBAL_PARAMS["sitemap"].append(relative_path)
+
                 pages_queue.append((item, destination))
 
                 pg_info = utils.get_page_info(item)
@@ -77,3 +81,5 @@ process_site(src_dir=src_dir, output_dir=output_dir)
 if config.GENERATE_RSS:
     import rss
     rss.build_rss(config.GLOBAL_PARAMS["pages"])
+if config.GENERATE_SITEMAP:
+    utils.build_sitemap()

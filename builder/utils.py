@@ -254,3 +254,24 @@ if config.GENERATE_RSS:
 
 def eval_to_json(eval_str):
     return "'"+json.dumps(eval(eval_str))+"'"
+
+
+
+def build_sitemap():
+    header = """<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Page Title</title>
+                </head>
+                <body>
+                <ul>"""
+    footer = """</ul>
+                </body>
+                </html>"""
+    content = ""
+    for p in config.GLOBAL_PARAMS["sitemap"]:
+        content += f'<li><a href="{p}">{p}</a></li>\n'
+
+    path = Path(get_folder("output")+"/sitemap.html")
+    path.write_text(header+content+footer, encoding="utf-8")
