@@ -52,10 +52,12 @@ def process_site(src_dir: Path, output_dir: Path):
                 pages_queue.append((item, destination))
 
                 pg_info = utils.get_page_info(item)
-                pg_meta = utils.get_page_metadata(item)
 
-                if pg_meta:
-                    config.GLOBAL_PARAMS["metadata"][str(item)] = pg_meta
+                pg_meta = utils.get_page_metadata(item)
+                pg_meta["relativeLink"] = str(relative_path)
+                pg_meta["link"] = config.SITE_ROOT + str(relative_path)
+                
+                config.GLOBAL_PARAMS["metadata"][str(item)] = pg_meta
 
                 if pg_info:
                     config.GLOBAL_PARAMS["pages"].append(pg_info)

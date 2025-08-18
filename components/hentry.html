@@ -3,8 +3,12 @@
 
 <article class="h-entry">
     <h1 class="p-name">$title</h1>
-    <time class="dt-published" datetime="$pubdate"></time>
-    <p class="p-summary" style="display: none;">$desc</p>
+    <div style="display: none;">
+        <time class="dt-published" datetime="$pubdate"></time>
+        <p class="p-summary">$desc</p>
+        <a class="u-url" href="$link">$title</a>
+        <a rel="author" href="https://shminge.dev/">shminge</a> 
+    </div>
     <section class="e-content">
         $inner
     </section>
