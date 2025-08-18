@@ -34,145 +34,165 @@
         </header>
 
         <div class="content-box">
-          <h1>the best way to get started is to do it yourself</h1>
-          <p>
-            I thought it would be appropriate to start this blog off by writing
-            a bit about what powers it. It lives on Github Pages (<a
-              href="https://github.com/shminge/shminge.dev"
-              >you can find all of this site there</a
-            >), but if you do some snooping around in the code you'll find some
-            very strange looking <code>html</code> files. For example, this page
-            you're on right now is the product of the
-            <a
-              href="https://github.com/shminge/shminge.dev/blob/main/src/blog/builder.html"
-              >following source page</a
-            >:
-          </p>
-          <pre><code class="language-html">&lt;pagelayout&gt;
+          <!--
+-->
+
+          <article class="h-entry">
+            <h1 class="p-name">
+              the best way to get started is to do it yourself
+            </h1>
+            <time class="dt-published" datetime="2025-08-15"></time>
+            <p class="p-summary" style="display: none">
+              some musings on blogging software and the benefits of DIY
+            </p>
+            <section class="e-content">
+              <p>
+                I thought it would be appropriate to start this blog off by
+                writing a bit about what powers it. It lives on Github Pages (<a
+                  href="https://github.com/shminge/shminge.dev"
+                  >you can find all of this site there</a
+                >), but if you do some snooping around in the code you'll find
+                some very strange looking <code>html</code> files. For example,
+                this page you're on right now is the product of the
+                <a
+                  href="https://github.com/shminge/shminge.dev/blob/main/src/blog/builder.html"
+                  >following source page</a
+                >:
+              </p>
+              <pre><code class="language-html">&lt;pagelayout&gt;
     &lt;md&gt;
         &lt;!-- markdown stuff --&gt;
     &lt;/m​d&gt;
 &lt;/pagelayout&gt;
 </code></pre>
-          <p>
-            Anyone familiar with <code>html</code> will know that those tags
-            don't exist. So how is this site working?
-          </p>
-          <h3>Existing Solutions</h3>
-          <p>
-            I've always wanted to host a site over the years, so I've tried many
-            of the options there are out there, and found them all lacking in
-            one way or another. Some of my favourites were:
-          </p>
-          <ul>
-            <li>
-              <strong><a href="https://bearblog.dev/">Bear Blog</a> -</strong> I
-              love this one so much, but its simplicity is also its drawback, as
-              I can't do everything I want to do.
-            </li>
-            <li>
-              <strong><a href="https://quartz.jzhao.xyz/">Quartz</a> -</strong>
-              This one was very attractive, as I store as much stuff as I can in
-              a large <a href="https://obsidian.md/">Obsidian</a> vault (this
-              post is being written in it right now), but as nice as it would be
-              to be able to publish straight out of it, it'd take a really good
-              understanding of the codebase before I could customise it to the
-              degree I wanted.
-            </li>
-            <li>
-              <strong
-                ><a href="https://nextjs.org/">React + Next.js</a> -</strong
-              >
-              This one almost stuck (this current site is a port of that attempt
-              to plain <code>html</code>), I just didn't like how bloated it
-              felt for what I wanted out of it.
-            </li>
-          </ul>
-          <p>
-            Being able to play with different platforms felt good and fun, but
-            ultimately it wasn't moving me any closer to
-            <em>actually having a blog with content</em>. It allowed me to feel
-            productive without doing anything. So a week ago I set out to go and
-            make my own site engine.
-          </p>
-          <h3>Requirements</h3>
-          <p>
-            I had a decently good idea of what I wanted from any possible
-            solution:
-          </p>
-          <ul>
-            <li>
-              <strong>Web Components</strong> - I liked using components in
-              React. I didn't use them for any sort of reactivity (hence the
-              feeling of bloat), but it was really nice to be able to define
-              something I could reuse again and again, especially if I could
-              pass it props. I know that &quot;official&quot; Web Components
-              exist, but I decided I didn't like them enough to use them.
-            </li>
-            <li>
-              <strong>MathJax</strong> - I like maths. It's only a matter of
-              time until I start writing posts which need formulas.
-            </li>
-            <li>
-              <strong>Markdown Posts</strong> - This was more optional than the
-              others, but I love markdown as a format.
-            </li>
-            <li>
-              <strong>Simplicity</strong> - This is crucial. Not only do I want
-              full control, I want full understanding as well. The less I
-              understand something, the harder it is to use, and the less I want
-              to use it.
-            </li>
-          </ul>
-          <p>
-            I ended up deciding to write in plain <code>HTML</code>,
-            <code>CSS</code>, and <code>js</code>. However, anyone who's written
-            <code>html</code> by hand before knows it can be a pain, so I wrote
-            my own build script (which supports all of those criteria above):
-            <a href="https://github.com/shminge/builder"
-              >builder: a small python build script to populate html
-              templates</a
-            >.
-          </p>
-          <h3>What does it do?</h3>
-          <p>
-            As of now (development is ongoing, and it'll presumably remain that
-            way as long as I keep working on that site), it lets you do the
-            following:
-          </p>
-          <ul>
-            <li>
-              <strong>Define, use and render templates -</strong> For example,
-              the <code>&lt;pagelayout&gt;</code> block above is simply a
-              wrapper for the rest of my site (header and such), and puts
-              whatever is inside it in the <code>&lt;body&gt;</code> tags.
-            </li>
-            <li>
-              <strong>Render Markdown -</strong> With a bit of help from the
-              <code>markdown-it-py</code> library, all text between
-              <code>&lt;md&gt;</code> tags gets converted from Markdown to HTML
-              at build time, letting me write in markdown and paste into my
-              <code>html</code> after.
-            </li>
-            <li>
-              <strong>Generate an RSS Feed -</strong> generate a feed of
-              whatever posts you want, wherever you want. This site has one
-              <a href="/feed.xml">here</a>.
-            </li>
-          </ul>
-          <p>
-            Finally, I have a system I where I can balance writing posts with
-            writing code for the site, and both are equally enjoyable. A system
-            that I completely understand, and don't have to spend hours reading
-            docs to do anything mildly complicated. A system that won't lock me
-            in, or break unexpectedly, or randomly be deprecated. A system that
-            is built for me, by me.
-          </p>
-          <p>
-            It'll always take more effort to make something yourself, but it'll
-            always be more rewarding when you can see the end product, and know
-            that you wrote <em>every line</em> of it.
-          </p>
+              <p>
+                Anyone familiar with <code>html</code> will know that those tags
+                don't exist. So how is this site working?
+              </p>
+              <h3>Existing Solutions</h3>
+              <p>
+                I've always wanted to host a site over the years, so I've tried
+                many of the options there are out there, and found them all
+                lacking in one way or another. Some of my favourites were:
+              </p>
+              <ul>
+                <li>
+                  <strong
+                    ><a href="https://bearblog.dev/">Bear Blog</a> -</strong
+                  >
+                  I love this one so much, but its simplicity is also its
+                  drawback, as I can't do everything I want to do.
+                </li>
+                <li>
+                  <strong
+                    ><a href="https://quartz.jzhao.xyz/">Quartz</a> -</strong
+                  >
+                  This one was very attractive, as I store as much stuff as I
+                  can in a large
+                  <a href="https://obsidian.md/">Obsidian</a> vault (this post
+                  is being written in it right now), but as nice as it would be
+                  to be able to publish straight out of it, it'd take a really
+                  good understanding of the codebase before I could customise it
+                  to the degree I wanted.
+                </li>
+                <li>
+                  <strong
+                    ><a href="https://nextjs.org/">React + Next.js</a> -</strong
+                  >
+                  This one almost stuck (this current site is a port of that
+                  attempt to plain <code>html</code>), I just didn't like how
+                  bloated it felt for what I wanted out of it.
+                </li>
+              </ul>
+              <p>
+                Being able to play with different platforms felt good and fun,
+                but ultimately it wasn't moving me any closer to
+                <em>actually having a blog with content</em>. It allowed me to
+                feel productive without doing anything. So a week ago I set out
+                to go and make my own site engine.
+              </p>
+              <h3>Requirements</h3>
+              <p>
+                I had a decently good idea of what I wanted from any possible
+                solution:
+              </p>
+              <ul>
+                <li>
+                  <strong>Web Components</strong> - I liked using components in
+                  React. I didn't use them for any sort of reactivity (hence the
+                  feeling of bloat), but it was really nice to be able to define
+                  something I could reuse again and again, especially if I could
+                  pass it props. I know that &quot;official&quot; Web Components
+                  exist, but I decided I didn't like them enough to use them.
+                </li>
+                <li>
+                  <strong>MathJax</strong> - I like maths. It's only a matter of
+                  time until I start writing posts which need formulas.
+                </li>
+                <li>
+                  <strong>Markdown Posts</strong> - This was more optional than
+                  the others, but I love markdown as a format.
+                </li>
+                <li>
+                  <strong>Simplicity</strong> - This is crucial. Not only do I
+                  want full control, I want full understanding as well. The less
+                  I understand something, the harder it is to use, and the less
+                  I want to use it.
+                </li>
+              </ul>
+              <p>
+                I ended up deciding to write in plain <code>HTML</code>,
+                <code>CSS</code>, and <code>js</code>. However, anyone who's
+                written <code>html</code> by hand before knows it can be a pain,
+                so I wrote my own build script (which supports all of those
+                criteria above):
+                <a href="https://github.com/shminge/builder"
+                  >builder: a small python build script to populate html
+                  templates</a
+                >.
+              </p>
+              <h3>What does it do?</h3>
+              <p>
+                As of now (development is ongoing, and it'll presumably remain
+                that way as long as I keep working on that site), it lets you do
+                the following:
+              </p>
+              <ul>
+                <li>
+                  <strong>Define, use and render templates -</strong> For
+                  example, the <code>&lt;pagelayout&gt;</code> block above is
+                  simply a wrapper for the rest of my site (header and such),
+                  and puts whatever is inside it in the
+                  <code>&lt;body&gt;</code> tags.
+                </li>
+                <li>
+                  <strong>Render Markdown -</strong> With a bit of help from the
+                  <code>markdown-it-py</code> library, all text between
+                  <code>&lt;md&gt;</code> tags gets converted from Markdown to
+                  HTML at build time, letting me write in markdown and paste
+                  into my <code>html</code> after.
+                </li>
+                <li>
+                  <strong>Generate an RSS Feed -</strong> generate a feed of
+                  whatever posts you want, wherever you want. This site has one
+                  <a href="/feed.xml">here</a>.
+                </li>
+              </ul>
+              <p>
+                Finally, I have a system I where I can balance writing posts
+                with writing code for the site, and both are equally enjoyable.
+                A system that I completely understand, and don't have to spend
+                hours reading docs to do anything mildly complicated. A system
+                that won't lock me in, or break unexpectedly, or randomly be
+                deprecated. A system that is built for me, by me.
+              </p>
+              <p>
+                It'll always take more effort to make something yourself, but
+                it'll always be more rewarding when you can see the end product,
+                and know that you wrote <em>every line</em> of it.
+              </p>
+            </section>
+          </article>
         </div>
       </main>
     </div>

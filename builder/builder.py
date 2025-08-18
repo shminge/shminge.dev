@@ -52,6 +52,10 @@ def process_site(src_dir: Path, output_dir: Path):
                 pages_queue.append((item, destination))
 
                 pg_info = utils.get_page_info(item)
+                pg_meta = utils.get_page_metadata(item)
+
+                if pg_meta:
+                    config.GLOBAL_PARAMS["metadata"][str(item)] = pg_meta
 
                 if pg_info:
                     config.GLOBAL_PARAMS["pages"].append(pg_info)
@@ -62,6 +66,7 @@ def process_site(src_dir: Path, output_dir: Path):
 
     for entry in pages_queue:
         page, destination = entry
+        config.GLOBAL_PARAMS["current_metadata"] = config.GLOBAL_PARAMS["metadata"].get(str(page), {})
         new_content = parse_page(page)
         destination.write_text(new_content, encoding="utf-8")
 

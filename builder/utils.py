@@ -31,10 +31,10 @@ def gather_components() -> dict[str, tuple[list[str], str]]:
                 components[file.stem] = read_component(file)
             else:
                 logging.warning(
-                    f"Skipping non-html component {(file.stem, file.suffix)}"
+                    f"  Skipping non-html component {(file.stem, file.suffix)}"
                 )
         else:
-            logging.warning(f"Skipping non-file {file.stem}")
+            logging.warning(f"  Skipping non-file {file.stem}")
 
     return components
 
@@ -91,9 +91,11 @@ def render_component(raw_data: str, substitutions: dict[str, str], flags: list[s
     def replacer(match) -> str:
         key = match.group(1)
         val = substitutions.get(key, None)
-        if val is not None :
+        if val is not None:
             return val
-        logging.warning(f"Failed to replace component ${key}")
+        elif (val2 := config.GLOBAL_PARAMS["current_metadata"].get(key, None)) is not None:
+            return val2
+        logging.warning(f"  Failed to replace component ${key}")
         return "!!INVALID!!"
 
     return re.sub(pattern, replacer, raw_data)
@@ -208,6 +210,10 @@ def parse_multi(page_content, name, component_content):
 
     return page_content
 
+def get_page_metadata(page: Path):
+    page_content = page.read_text()
+    match = re.findall(r"@(\w+) (.*?)$", page_content, re.MULTILINE)
+    return dict(match)
 
 
 

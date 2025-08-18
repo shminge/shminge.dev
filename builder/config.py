@@ -43,5 +43,7 @@ RSS_CHANNEL = {
 GLOBAL_PARAMS = {
     "pages": [],
     "sitemap": [],
+    "metadata": {},
+    "current_metadata": {}
 }
 
