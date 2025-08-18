@@ -136,7 +136,7 @@ if config.PARSE_MD:
 
     def parse_md(page_content):
         return re.sub(
-            md_pattern, lambda m: md.render(textwrap.dedent(m.group(1))), page_content
+            md_pattern, lambda m: md.render(textwrap.dedent(m.group(1).replace("\u200B", ""))), page_content
         )
 
     parse_markdown = parse_md
