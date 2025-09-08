@@ -21,14 +21,16 @@ def get_folder(folder_name: str) -> str:
 
 
 # gathers all components from the defined folder
-def gather_components() -> dict[str, tuple[list[str], str]]:
-    components: dict[str, tuple[list[str], str]] = {}
+def gather_components() -> dict[str, tuple[list[str], str] | Path]:
+    components: dict[str, tuple[list[str], str] | Path] = {}
 
     components_dir = Path(get_folder("components"))
     for file in components_dir.iterdir():
         if file.is_file():
             if file.suffix == ".html":
                 components[file.stem] = read_component(file)
+            elif file.suffix == ".py":
+                components[file.stem + file.suffix] = file
             else:
                 logging.warning(
                     f"  Skipping non-html component {(file.stem, file.suffix)}"
@@ -73,16 +75,6 @@ def render_component(raw_data: str, substitutions: dict[str, str], flags: list[s
             return ''
         
     raw_data = re.sub(if_pattern, if_repl, raw_data)
-
-
-    # we need to perform the json evals
-
-    json_pattern = r"""\$json\(['"](.*?)['"]\)"""
-
-    def json_replace(match):
-        return eval_to_json(match.group(1))
-
-    raw_data = re.sub(json_pattern, json_replace, raw_data)
 
 
     pattern = r"\$(\w+)"
@@ -171,7 +163,7 @@ def parse_links(content):
 
 
 def parse_inline(page_content, name, component_content):
-    block_pattern = re.compile(r"<" + name + "(.*?)/>", re.DOTALL)
+    block_pattern = re.compile(r"<" + name + r"[ \n](.*?)/>", re.DOTALL)
 
     def block_substituter(match):
         param_values = parse_args(match.group(1))
@@ -258,9 +250,6 @@ if config.GENERATE_RSS:
                 }
 
 
-def eval_to_json(eval_str):
-    return "'"+json.dumps(eval(eval_str))+"'"
-
 
 
 def build_sitemap():
@@ -281,3 +270,44 @@ def build_sitemap():
 
     path = Path(get_folder("output")+"/sitemap.html")
     path.write_text(header+content+footer, encoding="utf-8")
+
+
+
+
+import importlib.util
+
+
+def parse_py(page_content: str, name: str, pyc: Path):
+    block_pattern = re.compile(r"<" + re.escape(name) + r"\s*kwargs='(.*?)'\s*/>", re.DOTALL)
+
+    def block_substituter(match):
+        if match.group(1):
+            return render_from_py(pyc, json.loads(match.group(1)))
+        return render_from_py(pyc, {})
+
+    for i in range(config.MAX_RECURSION):
+        new_content = re.sub(block_pattern, block_substituter, page_content)
+        if new_content == page_content:
+            break
+        page_content = new_content
+
+    return page_content
+
+
+def render_from_py(filepath: Path, kwargs: dict):
+    # locate the file
+    if not filepath.exists():
+        raise FileNotFoundError(f"{filepath} not found")
+
+    # load the module dynamically
+    spec = importlib.util.spec_from_file_location(filepath.stem, filepath)
+    module = importlib.util.module_from_spec(spec) # pyright: ignore[reportArgumentType]
+    spec.loader.exec_module(module) # pyright: ignore[reportOptionalMemberAccess]
+
+    # check that render exists
+    if not hasattr(module, "render"):
+        raise AttributeError(f"{filepath} has no render() function")
+
+    # call render() and store result
+    result = module.render(config.GLOBAL_PARAMS, **kwargs)
+    return result

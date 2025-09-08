@@ -19,14 +19,22 @@ def parse_page(file: Path):
 
     if config.PARSE_MD_LINKS:
         page_content = utils.parse_links(page_content)
+    for i in range(1):
+        old_content = page_content
+        for name, data in components.items():
 
-    for name, data in components.items():
-        component_params, component_content = data
+            if isinstance(data, Path):
+                # do a python component instead
+                page_content = utils.parse_py(page_content, name, data)
+                continue
 
-        page_content = utils.parse_multi(page_content, name, component_content)
+            component_params, component_content = data
 
-        page_content = utils.parse_inline(page_content, name, component_content)
+            page_content = utils.parse_multi(page_content, name, component_content)
 
+            page_content = utils.parse_inline(page_content, name, component_content)
+        if old_content ==  page_content:
+            break
 
     return page_content
 
