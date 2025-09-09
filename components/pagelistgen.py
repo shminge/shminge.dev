@@ -2,13 +2,13 @@ from datetime import datetime
 
 def render(params, **kwargs):
     pages = params["pages"]
-    start = kwargs["startswith"]
+    has_text = kwargs["has"]
     max_posts = kwargs["maxposts"]
     entries = []
 
     # collect matching pages
     for page in pages:
-        if start in page["link"]:
+        if has_text in page["link"]:
             entry = {
                 "content": f'<li><a href="{page["link"]}">{page["title"]}</a></li>',
                 "date": page["pubDate"],
@@ -21,7 +21,7 @@ def render(params, **kwargs):
     if max_posts > 0:
         entries = entries[:max_posts]
 
-    # build raw string instead of HTML
+    # build string
     result_lines = []
     for entry in entries:
         result_lines.append(entry["content"])
